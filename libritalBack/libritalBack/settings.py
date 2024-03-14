@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
 # CSRF
 CSRF_COOKIE_SECURE = False
@@ -38,8 +39,11 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
 
-# CSRF_COOKIE_NAME = 'csrftoken'
-# CSRF_HEADER_NAME = 'X-CSRFToken'
+
+# Para las imagenes
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Application definition
 
@@ -51,6 +55,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'rest_framework',
+    'apps.librital',
+    'apps.image_ai',
+    'apps.user',
+    'apps.libro',
+    'apps.etiqueta',
+    'apps.categoria',
+    'apps.libro_categoria',
+    'apps.user_libro',
+    'apps.anuncio',
 ]
 
 MIDDLEWARE = [
@@ -92,8 +106,12 @@ WSGI_APPLICATION = 'libritalBack.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'libritalbd',
+        'USER': 'root',
+        'PASSWORD': '963963',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
