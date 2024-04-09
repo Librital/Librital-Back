@@ -16,15 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('usuario/', include('apps.user.urls')),
-    path('libro/', include('apps.libro.urls')),
-    path('categoria/', include('apps.categoria.urls')),
-    path('etiqueta/', include('apps.etiqueta.urls')),
-    path('anuncio/', include('apps.anuncio.urls')),
-    path('usuario_libro/', include('apps.user_libro.urls')),
-    path('libro_categoria/', include('apps.libro_categoria.urls')),
-    path('librital/', include('apps.librital.urls')),
+    path('apps/', include('apps.librital.urls')),
+    path('apps/', include('apps.user.urls')),
+    path('apps/', include('apps.libro.urls')),
+    path('apps/', include('apps.categoria.urls')),
+    path('apps/', include('apps.etiqueta.urls')),
+    path('apps/', include('apps.anuncio.urls')),
+    path('apps/', include('apps.user_libro.urls')),
+    path('apps/', include('apps.libro_categoria.urls')),
+    path('apps/', include('apps.librital.urls')),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

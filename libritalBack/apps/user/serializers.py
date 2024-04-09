@@ -7,6 +7,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         model = Usuario
         fields = '__all__'
         read_only_fields = ('created_at', )
+        write_only_fields = ('password', )
 
 
 

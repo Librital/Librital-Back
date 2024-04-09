@@ -7,5 +7,6 @@ class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
     updated_at = models.DateTimeField(auto_now=True)
+    es_activo = models.BooleanField(default=True)
 
     objects = models.Manager()
