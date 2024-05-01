@@ -27,17 +27,22 @@ SECRET_KEY = 'django-insecure-^6_4!#*#g33(&zu0^)^-nt$o2=b!11--^q=a#(2dg+#1hy1^%v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'user.Usuario'
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://192.168.1.144:4200",
+# ]
 CORS_ALLOW_CREDENTIALS = False
 
 # CSRF
 CSRF_COOKIE_SECURE = False
 CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
+# CSRF_TRUSTED_ORIGINS = ['http://192.168.1.144:4200']
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
 
