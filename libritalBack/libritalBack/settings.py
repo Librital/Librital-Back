@@ -35,9 +35,11 @@ AUTH_USER_MODEL = 'user.Usuario'
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS = [
-#     "http://192.168.1.144:4200",
+#     "http://localhost:4200",
 # ]
 CORS_ALLOW_CREDENTIALS = False
+
+
 
 # CSRF
 CSRF_COOKIE_SECURE = False
@@ -48,6 +50,9 @@ CSRF_COOKIE_HTTPONLY = False
 
 
 # Para las imagenes
+
+# MEDIA_URL = '/media/'
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -63,7 +68,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'apps.librital',
     'apps.image_ai',
     'apps.user',
     'apps.libro',

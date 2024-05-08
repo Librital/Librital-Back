@@ -7,3 +7,4 @@ class LibroSerializer(serializers.ModelSerializer):
         model = Libro
         fields = '__all__'
         read_only_fields = ['added_at', ]
+

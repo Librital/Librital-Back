@@ -8,5 +8,3 @@ class AnuncioViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = AnuncioSerializer
-
-    
