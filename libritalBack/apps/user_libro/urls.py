@@ -21,4 +21,5 @@ urlpatterns += [path('api/libro_usuario/saveUserLibro', saveUserLibro),
                 path('api/libro_usuario/addReadLaterUserLibro', addReadLaterUserLibro),
                 path('api/libro_usuario/addTerminadoLeerUserLibro', addTerminadoLeerUserLibro),
                 path('api/libro_usuario/addActualmenteLeyendoUserLibro', addActualmenteLeyendoUserLibro),
-                path('api/libro_usuario/addBibliotecaUserLibro', addBibliotecaUserLibro),]
+                path('api/libro_usuario/addBibliotecaUserLibro', addBibliotecaUserLibro),
+                path('api/libro_usuario/cargarTodosLibrosUsuario', cargarTodosLibrosUsuario),]

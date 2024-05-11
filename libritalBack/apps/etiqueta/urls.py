@@ -12,4 +12,5 @@ urlpatterns = router.urls
 
 urlpatterns += [path('api/etiqueta/addEtiquetaUserLibro', addEtiquetaUserLibro),
                 path('api/etiqueta/obtenerEtiquetasCustomUserLibro', obtenerEtiquetasCustomUserLibro),
-                path('api/etiqueta/removeEtiquetaCustomUserLibro', removeEtiquetaCustomUserLibro)]
+                path('api/etiqueta/removeEtiquetaCustomUserLibro', removeEtiquetaCustomUserLibro),
+                path('api/etiqueta/obtenerTodasEtiquetasCustomUser/<int:id_user>', obtenerTodasEtiquetasCustomUser),]

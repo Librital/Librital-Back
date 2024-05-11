@@ -37,6 +37,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:4200",
 # ]
+
+# PARA PODER PERMITIR MICROFONO Y CAMARA EN PROD
+# CORS_ORIGIN_WHITELIST = [
+#     'https://tu-nuevo-dominio.com',
+#     # Otros dominios permitidos, si es necesario
+# ]
+
+
 CORS_ALLOW_CREDENTIALS = False
 
 

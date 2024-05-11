@@ -49,6 +49,7 @@ def procesarImagenLibro(request):
         titulo, autor, editorial, fecha, categoria, isbn13, isbn10, descripcion, image_url = obtainInfoLibro.get_book_cover_image(
             texto_limpio)
 
+
         if image_url == 'No encontrado':
             return Response({'message': 'No encontrado'})
 
