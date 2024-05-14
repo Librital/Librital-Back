@@ -10,4 +10,5 @@ router.register('api/libro_categoria', libro_CategoriaViewSet, 'libro_categoria'
 
 urlpatterns = router.urls
 
-urlpatterns += [path('api/libro_categoria/obtenerCategoriaLibro', obtenerCategoriaLibro)]
+urlpatterns += [path('api/libro_categoria/obtenerCategoriaLibro', obtenerCategoriaLibro),
+                path('api/libro_categoria/obtenerCategoriaLibroAdmin', obtenerCategoriaLibroAdmin)]

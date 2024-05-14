@@ -11,7 +11,7 @@ class Libro(models.Model):
     editorial = models.TextField(null=True, blank=True)
     fecha = models.CharField(max_length=255, null=True, blank=True)
     descripcion = models.TextField(blank=True, null=True)
-    portada = models.ImageField(upload_to=MEDIA_ROOT, null=True, blank=True)
+    portada = models.ImageField(upload_to=MEDIA_ROOT, null=True, blank=True, max_length=255)
     isbn13 = models.CharField(max_length=13, blank=True)
     isbn10 = models.CharField(max_length=10, blank=True)
     added_at = models.DateTimeField(auto_now_add=True)

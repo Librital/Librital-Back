@@ -14,4 +14,7 @@ urlpatterns += [path('api/libro/identificarISBN', identificarISBN),
                 path('api/libro/obtenerLibroId/<int:id>/', obtenerLibroId),
                 path('api/libro/obtenerNewArrivals', obtenerNewArrivals),
                 path('api/libro/identificarISBN', identificarISBN),
-                path('api/libro/addLibroNuevoBiblioteca', addLibroNuevoBiblioteca),]
+                path('api/libro/addLibroNuevoBiblioteca', addLibroNuevoBiblioteca),
+                path('api/libro/obtenerTodosLibrosAdmin', obtenerTodosLibrosAdmin),
+                path('api/libro/obtenerInfoLibroIdAdmin/<int:id>', obtenerInfoLibroIdAdmin),
+                path('api/libro/modificarLibro', modificarLibro),]

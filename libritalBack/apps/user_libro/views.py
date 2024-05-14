@@ -347,7 +347,7 @@ def cargarTodosLibrosUsuario(request):
 
             if etiqueta == 'Todos':
 
-                librosUsuario = libro_Usuario.objects.filter(id_usuario=id_user, activo=1).values('id_libro',
+                librosUsuario = libro_Usuario.objects.filter(id_usuario=id_user, activo=True).values('id_libro',
                                                                                                   'calificacion',
                                                                                                   'es_favorito',
                                                                                                   'actualmente_leyendo',
@@ -361,22 +361,22 @@ def cargarTodosLibrosUsuario(request):
 
                     if len(librosUsuario) != 0:
                         numLibrosTotalesDefault = Libro.objects.filter(
-                            id_libro__in=[libro['id_libro'] for libro in librosUsuario]).values('id_libro', 'titulo',
+                            id_libro__in=[libro['id_libro'] for libro in librosUsuario], es_activo=True).values('id_libro', 'titulo',
                                                                                                 'autor',
                                                                                                 'portada').all()
                         # librosResultados = Libro.objects.filter(id_libro__in=[libro['id_libro'] for libro in librosUsuario]).values('id_libro', 'titulo', 'autor', 'portada')[offset:offset + numMostrar]
 
                     if len(librosConEtiquetas) != 0:
                         numLibrosTotalesCustom = Libro.objects.filter(
-                            id_libro__in=[libro['id_libro'] for libro in librosConEtiquetas]).values('id_libro',
+                            id_libro__in=[libro['id_libro'] for libro in librosConEtiquetas], es_activo=True).values('id_libro',
                                                                                                      'titulo', 'autor',
                                                                                                      'portada').all()
 
                     librosTotales = librosUsuario.values('id_libro').union(librosConEtiquetas.values('id_libro'))
 
-                    librosTotal = Libro.objects.filter(id_libro__in=librosTotales).values('id_libro', 'titulo', 'autor',
+                    librosTotal = Libro.objects.filter(id_libro__in=librosTotales, es_activo=True).values('id_libro', 'titulo', 'autor',
                                                                                           'portada').all()
-                    librosUnicos = Libro.objects.filter(id_libro__in=librosTotales).values('id_libro', 'titulo',
+                    librosUnicos = Libro.objects.filter(id_libro__in=librosTotales, es_activo=True).values('id_libro', 'titulo',
                                                                                            'autor', 'portada')[
                                    offset:offset + numMostrar]
 

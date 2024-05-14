@@ -134,8 +134,9 @@ def obtenerLibros(request):
             if valorBuscar == '':
                 try:
                     idCategoria = Categoria.objects.filter(es_activo=1, nombre=genero).first().id
-                    idsLibros = libro_Categoria.objects.filter(activo=1, id_categoria=idCategoria).values_list('id_libro',
-                                                                                                     flat=True)
+                    idsLibros = libro_Categoria.objects.filter(activo=1, id_categoria=idCategoria).values_list(
+                        'id_libro',
+                        flat=True)
 
                     librosTotales = Libro.objects.filter(es_activo=1, id_libro__in=idsLibros).values('id_libro',
                                                                                                      'titulo', 'autor',
@@ -156,8 +157,9 @@ def obtenerLibros(request):
 
                 try:
                     idCategoria = Categoria.objects.filter(es_activo=1, nombre=genero).first().id
-                    idsLibros = libro_Categoria.objects.filter(activo=1, id_categoria=idCategoria).values_list('id_libro',
-                                                                                                     flat=True)
+                    idsLibros = libro_Categoria.objects.filter(activo=1, id_categoria=idCategoria).values_list(
+                        'id_libro',
+                        flat=True)
 
                     librosTotales = Libro.objects.filter(es_activo=1, id_libro__in=idsLibros).values('id_libro',
                                                                                                      'titulo', 'autor',
@@ -194,7 +196,7 @@ def obtenerLibroId(request, id):
     if request.method == 'GET':
         data = request.data
 
-        libro = get_object_or_404(Libro, id_libro=id)
+        libro = get_object_or_404(Libro, id_libro=id, es_activo=1)
         libro_serializer = LibroSerializer(libro)
 
         if libro is not None:
@@ -306,8 +308,10 @@ def addLibroNuevoBiblioteca(request):
                 libroAdd = Libro.objects.filter(id_libro=libroExiste[0]).first()
                 usuarioAdd = Usuario.objects.filter(id=usuario['id']).first()
 
-                userLibro = libro_Usuario.objects.create(es_favorito=False, actualmente_leyendo=False, es_leer_mas_tarde=False,
-                                                         es_leido=False, calificacion=0, id_libro=libroAdd, id_usuario=usuarioAdd,
+                userLibro = libro_Usuario.objects.create(es_favorito=False, actualmente_leyendo=False,
+                                                         es_leer_mas_tarde=False,
+                                                         es_leido=False, calificacion=0, id_libro=libroAdd,
+                                                         id_usuario=usuarioAdd,
                                                          activo=True, en_biblioteca=1)
                 userLibro.save()
 
@@ -365,16 +369,12 @@ def addLibroNuevoBiblioteca(request):
 
                 imagen = request.FILES['cover']
 
-
                 nombre_archivo = default_storage.save(imagen.name, imagen)
                 url_imagen = default_storage.url(nombre_archivo)
-
 
                 # with default_storage.open(url_imagen, 'wb+') as destino:
                 #     for parte in imagen.chunks():
                 #         destino.write(parte)
-
-
 
                 if libro['isbn13'] == 'No ISBN':
                     isbn = libro['isbn10']
@@ -393,19 +393,151 @@ def addLibroNuevoBiblioteca(request):
                                                       isbn13=isbn, isbn10='No ISBN', es_activo=True)
                 nuevoLibro.save()
 
-
                 categoria_id = Categoria.objects.filter(nombre=nombre_categoria).first()
                 libroAdd = Libro.objects.filter(id_libro=nuevoLibro.id_libro).first()
 
-
-                libro_categoria = libro_Categoria.objects.create(id_libro=libroAdd, id_categoria=categoria_id, activo=True)
+                libro_categoria = libro_Categoria.objects.create(id_libro=libroAdd, id_categoria=categoria_id,
+                                                                 activo=True)
                 libro_categoria.save()
 
                 usuarioAdd = Usuario.objects.filter(id=usuario['id']).first()
 
-                userLibro = libro_Usuario.objects.create(es_favorito=False, actualmente_leyendo=False, es_leer_mas_tarde=False, es_leido=False,
-                                                         calificacion=0, id_libro=libroAdd, id_usuario=usuarioAdd, activo=True, en_biblioteca=1)
+                userLibro = libro_Usuario.objects.create(es_favorito=False, actualmente_leyendo=False,
+                                                         es_leer_mas_tarde=False, es_leido=False,
+                                                         calificacion=0, id_libro=libroAdd, id_usuario=usuarioAdd,
+                                                         activo=True, en_biblioteca=1)
 
                 userLibro.save()
 
                 return Response({'message': 'Guardado'})
+
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def obtenerTodosLibrosAdmin(request):
+    if request.method == 'POST':
+
+        data = request.data
+
+        numMostrar = 10
+        pagina = int(data['pagina'])
+        titulo = data['titulo']
+        offset = (pagina - 1) * numMostrar
+
+        if titulo != '':
+
+            librosTotales = Libro.objects.filter(titulo__icontains=titulo).all()
+            libros = Libro.objects.filter(titulo__icontains=titulo).all().order_by('-added_at')[
+                     offset:offset + numMostrar]
+            librosResultados = LibroSerializer(libros, many=True)
+
+            return Response({'message': 'Obtenido',
+                             'numMostrar': numMostrar,
+                             'libros': librosResultados.data,
+                             'numLibros': len(librosTotales)})
+
+
+        else:
+            libros = Libro.objects.all().order_by('-added_at')[offset:offset + numMostrar]
+            numLibros = Libro.objects.all()
+            librosResultados = LibroSerializer(libros, many=True)
+
+            return Response({'message': 'Obtenido',
+                             'numMostrar': numMostrar,
+                             'libros': librosResultados.data,
+                             'numLibros': len(numLibros)})
+
+
+@api_view(['GET'])
+def obtenerInfoLibroIdAdmin(request, id):
+    if request.method == 'GET':
+        data = request.data
+
+        libro = Libro.objects.filter(id_libro=id).first()
+        libro_serializer = LibroSerializer(libro)
+
+        if libro is not None:
+            return Response({'message': 'Obtenido',
+                             'libro': libro_serializer.data})
+        else:
+            return Response({'message': 'Error'})
+
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def modificarLibro(request):
+    if request.method == 'POST':
+
+        libro = json.loads(request.POST.get('libro'))
+        id_libro = request.POST.get('id_libro')
+        nombre_categoria = request.POST.get('categoria')
+        cover_file = request.FILES.get('cover')
+
+        fechaParts = libro['fecha'].split('-')
+        fecha = fechaParts[2] + '/' + fechaParts[1] + '/' + fechaParts[0]
+
+        if cover_file is None:
+            # No se edita la portada
+
+            libroEdit = Libro.objects.filter(id_libro=id_libro).first()
+
+            libroEdit.titulo = libro['titulo']
+            libroEdit.autor = libro['autor']
+            libroEdit.editorial = libro['editorial']
+            libroEdit.fecha = fecha
+            libroEdit.descripcion = libro['descripcion']
+            libroEdit.isbn13 = libro['isbn13']
+            libroEdit.isbn10 = libro['isbn10']
+            libroEdit.es_activo = libro['es_activo']
+
+            libroEdit.save()
+
+            categoriaLibro = libro_Categoria.objects.filter(id_libro=libroEdit).first()
+            categoria = Categoria.objects.filter(nombre=nombre_categoria).first()
+            categoriaLibro.id_categoria = categoria
+
+            categoriaLibro.save()
+
+            # Se elimina o aniade el libro de la biblioteca de los usuarios
+            usuariosLibros = libro_Usuario.objects.filter(id_libro=libroEdit).all()
+
+            for usuario in usuariosLibros:
+                usuario.activo = libro['es_activo']
+                usuario.save()
+
+            return Response({'message': 'Modificado'})
+
+        else:
+            # Se edita la portada
+
+            nombre_archivo = default_storage.save(cover_file.name, cover_file)
+            url_imagen = default_storage.url(nombre_archivo)
+
+            libroEdit = Libro.objects.filter(id_libro=id_libro).first()
+
+            libroEdit.titulo = libro['titulo']
+            libroEdit.autor = libro['autor']
+            libroEdit.editorial = libro['editorial']
+            libroEdit.fecha = fecha
+            libroEdit.descripcion = libro['descripcion']
+            libroEdit.isbn13 = libro['isbn13']
+            libroEdit.isbn10 = libro['isbn10']
+            libroEdit.es_activo = libro['es_activo']
+            libroEdit.portada = url_imagen
+
+            libroEdit.save()
+
+            categoriaLibro = libro_Categoria.objects.filter(id_libro=libroEdit).first()
+            categoria = Categoria.objects.filter(nombre=nombre_categoria).first()
+            categoriaLibro.id_categoria = categoria
+
+            categoriaLibro.save()
+
+            # Se elimina o aniade el libro de la biblioteca de los usuarios
+            usuariosLibros = libro_Usuario.objects.filter(id_libro=libroEdit).all()
+
+            for usuario in usuariosLibros:
+                usuario.activo = libro['es_activo']
+                usuario.save()
+
+            return Response({'message': 'Modificado'})
