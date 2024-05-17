@@ -27,15 +27,15 @@ SECRET_KEY = 'django-insecure-^6_4!#*#g33(&zu0^)^-nt$o2=b!11--^q=a#(2dg+#1hy1^%v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'user.Usuario'
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:4200",
+#     "http://192.168.56.1:80",
 # ]
 
 # PARA PODER PERMITIR MICROFONO Y CAMARA EN PROD
@@ -51,8 +51,8 @@ CORS_ALLOW_CREDENTIALS = False
 
 # CSRF
 CSRF_COOKIE_SECURE = False
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
 CSRF_TRUSTED_ORIGINS = ['http://localhost:4200']
-# CSRF_TRUSTED_ORIGINS = ['http://192.168.1.144:4200']
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
 
@@ -83,7 +83,7 @@ INSTALLED_APPS = [
     'apps.categoria',
     'apps.libro_categoria',
     'apps.user_libro',
-    'apps.anuncio',
+    'apps.mapa',
     'rest_framework_simplejwt',
 ]
 

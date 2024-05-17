@@ -26,10 +26,10 @@ urlpatterns = [
     path('apps/', include('apps.libro.urls')),
     path('apps/', include('apps.categoria.urls')),
     path('apps/', include('apps.etiqueta.urls')),
-    path('apps/', include('apps.anuncio.urls')),
     path('apps/', include('apps.user_libro.urls')),
     path('apps/', include('apps.libro_categoria.urls')),
     path('apps/', include('apps.image_ai.urls')),
+    path('apps/', include('apps.mapa.urls')),
     # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

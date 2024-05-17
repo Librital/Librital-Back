@@ -81,7 +81,7 @@ def obtenerTodasEtiquetasCustomUser(request, id_user):
 
         librosEtiquetasUser = Etiqueta.objects.filter(id_usuario=id_user).values('id_libro').all()
 
-        if librosEtiquetasUser is not None:
+        if len(librosEtiquetasUser) > 0:
 
             librosActivos = Libro.objects.filter(id_libro__in=librosEtiquetasUser, es_activo=1).all()
 
