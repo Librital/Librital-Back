@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import libro_Usuario
+from ..categoria.models import Categoria
 from ..etiqueta.models import Etiqueta
 from ..libro.models import Libro
 from ..libro.serailizers import LibroSerializer
+from ..libro_categoria.models import libro_Categoria
 from ..user.models import Usuario
 
 
@@ -587,4 +589,38 @@ def cargarTodosLibrosUsuario(request):
                 return Response({'message': 'No hay libros'})
 
 
+
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+def obtenerRecomendacionesCategoriaLibrosUser(request):
+    if request.method == 'POST':
+        data = request.data
+
+        id_user = data.get('id_user')
+
+        libroUserValorados = libro_Usuario.objects.filter(id_usuario=id_user, activo=True).values('id_libro',
+                                                                                                     'calificacion')
+
+        if libroUserValorados.exists():
+            categorias_usuario = Categoria.objects.filter(
+                libro_categoria__id_libro__in=libroUserValorados.values('id_libro')).distinct()
+
+            # Obtener libros en las mismas categorías, ordenados por calificación promedio de otros usuarios
+            libros_recomendados = Libro.objects.filter(
+                libro_categoria__id_categoria__in=categorias_usuario
+            ).exclude(
+                libro_usuario__id_usuario=id_user
+            ).annotate(
+                promedio_calificacion=Avg('libro_usuario__calificacion')
+            ).order_by('-promedio_calificacion')
+
+            libros_recomendados = libros_recomendados[:15]
+
+            libros_serializer = LibroSerializer(libros_recomendados, many=True)
+
+            return Response({'message': 'Obtenido',
+                            'libros': libros_serializer.data})
+
+        return Response({'message': 'No hay libros valorados'})
 
