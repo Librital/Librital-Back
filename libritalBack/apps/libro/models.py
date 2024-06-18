@@ -17,9 +17,10 @@ class Libro(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     es_activo = models.BooleanField(default=True)
+    libro_categorias = models.ManyToManyField(Categoria, through='libro_categoria.Libro_Categoria')
 
     objects = models.Manager()
 
-    libro_categorias = models.ManyToManyField(Categoria, through='libro_categoria.Libro_Categoria')
+
 
 

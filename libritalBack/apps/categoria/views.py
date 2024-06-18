@@ -18,7 +18,7 @@ from ..user_libro.models import libro_Usuario
 @api_view(['GET'])
 def obtenerCategorias(request):
     if request.method == 'GET':
-        categorias = Categoria.objects.filter(sub_categoria_id__isnull=True, es_activo=1).all()
+        categorias = Categoria.objects.filter(parent_categoria_id__isnull=True, es_activo=1).all()
         serializer = CategoriaSerializer(categorias, many=True)
 
         return Response(serializer.data)
@@ -30,7 +30,7 @@ def obtenerMejoresLibrosPerCategoria(request):
     if request.method == 'GET':
         data = request.data
 
-        categorias = Categoria.objects.filter(sub_categoria_id__isnull=True, es_activo=1)
+        categorias = Categoria.objects.filter(parent_categoria_id__isnull=True, es_activo=1)
 
         mejores_libros_por_categoria = []
         num_votos = []

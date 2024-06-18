@@ -23,18 +23,15 @@ pytesseract.pytesseract.tesseract_cmd = tesseract_path
 # nltk.download('wordnet')
 
 def limpiar_frase(frase):
-    # Tokenización
+
     tokens = word_tokenize(frase)
 
-    # Eliminación de puntuación y palabras vacías
-    stop_words = set(stopwords.words('spanish'))  # Puedes cambiar 'spanish' por el idioma que necesites
+    stop_words = set(stopwords.words('spanish'))
     palabras_limpias = [word for word in tokens if word.isalnum() and word.lower() not in stop_words]
 
-    # Lematización (opcional)
-    lemmatizer = WordNetLemmatizer()  # Inicializa el lematizador
+    lemmatizer = WordNetLemmatizer()
     lemas = [lemmatizer.lemmatize(word) for word in palabras_limpias]
 
-    # Unir las palabras limpias en una frase nuevamente
     frase_limpia = ' '.join(lemas)
 
     return frase_limpia
@@ -77,7 +74,7 @@ def recognizeTextBook(nombre_archivo):
 
     # Pre procesado del texto
 
-    cv2.imwrite('ia_media/' + nombre, thresh)
+    cv2.imwrite('ia_media/' + nombre, result)
     imageP = Image.open('ia_media/' + nombre)
 
     texto_reconodico = pytesseract.image_to_string(imageP, config=custom_config)
@@ -91,10 +88,6 @@ def recognizeTextBook(nombre_archivo):
             (x, y, w, h) = (d['left'][i], d['top'][i], d['width'][i], d['height'][i])
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    print(texto_reconodico)
-
     texto_limpio = limpiar_frase(texto_reconodico.lower())
-
-    print(texto_limpio)
 
     return texto_limpio

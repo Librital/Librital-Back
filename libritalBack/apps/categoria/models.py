@@ -8,7 +8,7 @@ class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100, blank=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
-    sub_categoria = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent_categoria = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     es_activo = models.BooleanField(default=True)
     img = models.ImageField(upload_to=MEDIA_ROOT, null=True, blank=True)
 

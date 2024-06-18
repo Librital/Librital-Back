@@ -2,10 +2,12 @@ import time
 
 import pymysql
 from selenium import webdriver
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 options = Options()
+options.add_argument("--headless")
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
 
@@ -33,9 +35,13 @@ def get_book_cover_image(title):
     cookies_accept.click()
     time.sleep(1)
 
-    input_element = driver.find_element(By.CLASS_NAME, 'buscador')
-    input_element.find_element(By.TAG_NAME, 'input').send_keys(title)
-    time.sleep(5)
+    # input_element = driver.find_element(By.CLASS_NAME, 'buscador')
+    # input_element.find_element(By.TAG_NAME, 'input').send_keys(title)
+    input_element = driver.find_element(By.CLASS_NAME, 'book-finder')
+    input_element.send_keys(title)
+    input_element.send_keys(Keys.ENTER)
+
+    time.sleep(3)
 
     try:
         book_card = driver.find_element(By.CLASS_NAME, 'x-result-link')
@@ -99,11 +105,6 @@ def get_book_cover_image(title):
                 if isbn13 in listaISBN13 or isbn10 in listaISBN10:
                     # EL LIBRO YA EXISTE EN BD
 
-                    print(isbn13)
-                    print(isbn10)
-
-                    print('El libro ya existe en la base de datos')
-
                     titulo_bd = ""
                     autor_bd = ""
                     editorial_bd = ""
@@ -117,12 +118,8 @@ def get_book_cover_image(title):
 
                         if isbn13 != "No ISBN":
 
-                            print(isbn13)
-
                             sql_select_libro = "SELECT id_libro, titulo, autor, editorial, fecha, isbn13, isbn10, descripcion, portada FROM libro_libro WHERE isbn13 = '{0}'".format(
                                 isbn13)
-
-                            print(sql_select_libro)
 
                             cursor.execute(sql_select_libro)
                             resultado_libro = cursor.fetchall()
@@ -143,9 +140,6 @@ def get_book_cover_image(title):
 
                             cursor.execute(sql_select_categoria_libro)
                             resultado_categoria_libro = cursor.fetchone()
-
-                            print(resultado_categoria_libro)
-                            print(resultado_categoria_libro[0])
 
                             sql_select_categoria_nombre = "SELECT nombre FROM categoria_categoria WHERE id = {0}".format(
                                 resultado_categoria_libro[0])
@@ -227,13 +221,13 @@ def get_book_cover_image(title):
 
                     categoria = lista_categoria[2].text
 
-                    try:
-                        descripcion_ = driver.find_element(By.CLASS_NAME, 'formated-text')
+                    descripcion_ = driver.find_elements(By.CLASS_NAME, 'formated-text')
 
-                        if descripcion_ is not None or descripcion_ != "":
-                            descripcion_clean = descripcion_.text
-                            descripcion = descripcion_clean.replace("'", '"')
-                    except:
+                    if descripcion_ is not None or descripcion_ != "":
+                        for i in descripcion_:
+                            descripcion_clean = i.text
+                            descripcion += descripcion_clean.replace("'", '"')
+                    else:
                         descripcion = ""
 
                     titulo_ = driver.find_element(By.CLASS_NAME, 'text-h4')
